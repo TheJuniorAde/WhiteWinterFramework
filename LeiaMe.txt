@@ -1,0 +1,8 @@
+Configurações gerais:
+	- Abra o arquivo LOCALHOST.htaccess e mude o caminho virtual do Framework
+	- Abra o arquivo index.php e mude a constante BASEPATH para o caminho virtual do Framework
+	- Abra o arquivo application/config/globals.php e mude as constantes de acordo com as suas especificações de banco de dados
+
+Na pasta SQL se encontra framework.sql, onde deve-se criar o banco de dados configurado no arquivo globals.php e executar os comandos de framework.sql
+
+Se for seguido conforme dito, a configuração e execução do framework ocorrerá sem problemas!
