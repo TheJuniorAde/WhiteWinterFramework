@@ -156,7 +156,7 @@
 			if (isset($this->_limit))
 				$conditions .= $this->_limit;
 
-			print $this->_query = "SELECT * FROM " . $from . " WHERE " . $conditions;
+			$this->_query = "SELECT * FROM " . $from . " WHERE " . $conditions;
 
 			$result = DB::$instance->query($this->_query);
 
