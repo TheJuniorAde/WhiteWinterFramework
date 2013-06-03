@@ -83,8 +83,9 @@
 
 					if (is_subclass_of($controller, '\\Controller\\DefaultController'))
 					{
+						$dbInstance = new DB(\Config\Globals::$dns, \Config\Globals::$user, \Config\Globals::$pass);
 						$daoName = '\\DAO\\' . $class;
-						$dao = (object) new $daoName(DB::connect());
+						$dao = (object) new $daoName($dbInstance);
 	
 						$rnName = '\\RN\\' . $class;					
 						$rn = (object) new $rnName($dao);
@@ -98,13 +99,11 @@
 					if ($method)
 					{
 						$controller->request->initialize(Application::$uri['controller']);
-
 						$controller->__before();
 
 						$this->token(Session::$id);
 
 						$controller->{Application::$uri['method']}();
-
 						$controller->__after();
 					}
 					elseif (!$method)

@@ -1,8 +1,8 @@
 <?php
 	namespace Config;
 
-	define('DBHOST',	'localhost');
-	define('DBNAME',	'framework');
+	define('DBHOST',	'turin');
+	define('DBNAME',	'namespace');
 	define('DBUSER',	'root');
 	define('DBPASS',	'');
 

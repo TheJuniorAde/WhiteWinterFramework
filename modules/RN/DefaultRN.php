@@ -10,7 +10,7 @@
 		 * Inst&acirc;ncia local do Data Access Object (DAO)
 		 * @var \DAO\DefaultDAO
 		 */
-		private $dao;
+		protected $dao;
 
 		public function __construct(DefaultDAO $dao)
 		{

@@ -43,7 +43,7 @@
 				if (is_array($id))
 				{
 					foreach ($id as $column => $value)
-						$this->where($column, '=', $value);
+						$this->where($column . '=', $value);
 
 					$this->find();
 				}
@@ -138,15 +138,15 @@
 			if ($pk !== null || $pk !== array())
 			{
 				if ($pk['field'] !== null)
-					$this->where($pk['field'], '=', $pk['value']);
+					$this->where($pk['field'] . '=', $pk['value']);
 			}
 
-			$from = '`'.$this->_table.'` AS `'.$this->_model.'` ';
+			$from = '`'.$this->_table.'` ';
 
-			$conditions = '\'1\'=\'1\' AND ';
+			$conditions = '';
 
 			if (isset($this->_conditions))
-				$conditions .= $this->_conditions;
+				$conditions = $this->_conditions;
 
 			$conditions = substr($conditions, 0, -4);
 
@@ -156,7 +156,7 @@
 			if (isset($this->_limit))
 				$conditions .= $this->_limit;
 
-			$this->_query = "SELECT * FROM " . $from . " WHERE " . $conditions;
+			print $this->_query = "SELECT * FROM " . $from . " WHERE " . $conditions;
 
 			$result = DB::$instance->query($this->_query);
 
@@ -193,9 +193,31 @@
 		 * @param string $value
 		 * @return \Core\ORM
 		 */
-		public function where($field, $compare, $value)
+		public function where($clause, $value)
 		{
-			$this->_conditions .= '`' . $this->_model . '`.`' . $field . '` ' . (($compare !== '')?$compare:'=') . ' \'' . mysql_real_escape_string($value) . '\' AND ';
+			$clause = str_replace('?', ' \'' . mysql_real_escape_string($value) . '\'', $clause);
+
+			$this->_conditions .= '(' . $clause . ') AND ';
+
+			return $this;
+		}
+
+		/**
+		 * Cl&aacute;usula de condi&ccedil;&atilde;o WHERE (com OR)
+		 * @param string $field
+		 * @param string $compare
+		 * @param string $value
+		 * @return \Core\ORM
+		 */
+		public function orWhere($clause, $value)
+		{
+			if ($this->_conditions !== null)
+			{
+				$clause = str_replace('?', ' \'' . mysql_real_escape_string($value) . '\'', $clause);
+
+				$this->_conditions = substr($this->_conditions, 0, -4);
+				$this->_conditions .= ' OR (' . $clause . ') AND ';
+			}
 
 			return $this;
 		}

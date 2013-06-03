@@ -1,14 +1,14 @@
 <?php
 	namespace DAO;
 
+	use \Core\DB;
 	use \Core\ORM;
-	use PDO;
 
 	abstract class DefaultDAO
 	{
 		/**
 		 * Inst&acirc;ncia da sess&atilde;o do banco de dados
-		 * @var \PDO
+		 * @var \Core\DB
 		 */
 		private $session;
 
@@ -16,9 +16,9 @@
 		 * Classe de persist&ecirc;ncia
 		 * @var \Core\ORM
 		 */
-		private $persistent_class;
+		protected $persistent_class;
 
-		public function __construct(PDO $session, $persistent_class = 'Model')
+		public function __construct(DB $session, $persistent_class = 'Model')
 		{
 			$this->session = $session;
 			$this->persistent_class = ORM::factory($persistent_class);
@@ -53,15 +53,11 @@
 
 		public function update($data)
 		{
-			$this->persistent_class = ORM::factory($this->persistent_class);
-
 			return (int) $this->persistent_class->update($data);
 		}
 
 		public function save($data)
 		{
-			$this->persistent_class = ORM::factory($this->persistent_class);
-
 			$this->persistent_class->save($data);
 
 			return (int) $this->persistent_class->getLastInsertId();

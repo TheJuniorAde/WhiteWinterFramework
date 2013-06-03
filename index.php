@@ -1,6 +1,6 @@
 <?php
 	define('EXT',		'.php');
-	define('BASEPATH',	'/WhiteWinterFramework/');
+	define('BASEPATH',	'/');
 	define('APPPATH',	'application/');
 	define('SYSPATH',	'system/');
 	define('MODULEPATH','modules/');

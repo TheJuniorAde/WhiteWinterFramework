@@ -2,8 +2,8 @@
 	namespace Core;
 
 	use \Config\Globals;
+	use \PDO;
 	use Exception;
-	use PDO;
 
 	/**
 	 * Classe respons&aacute;vel por fornecer ferramentas para gerenciar inst&acirc;ncias e conex&otilde;es ao banco de dados
@@ -12,7 +12,7 @@
 	 * @throws ExceptionHandler
 	 * @version 1.0
 	 **/
-	abstract class DB extends PDO
+	class DB extends PDO
 	{
 		/**
 		 * @var \PDO
@@ -44,7 +44,9 @@
 					self::$instance = new PDO(self::$dns, self::$user, self::$pass);
 
 					if (!self::$instance)
+					{
 						throw new ExceptionHandler(array('title'=>'Erro!!', 'trace'=>'Erro ao conectar na base de dados'));
+					}
 				}
 				catch(Exception $e)
 				{
