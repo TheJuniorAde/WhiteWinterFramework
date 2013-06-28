@@ -33,7 +33,8 @@
 
 		public static function __uri()
 		{
-			$uri = BASEPATH !== '/' ? str_replace(BASEPATH, '', $_SERVER['REQUEST_URI']) : $_SERVER['REQUEST_URI'];
+			$uri = BASEPATH !== '/' ? str_replace(BASEPATH, '', str_replace('index.php', '', $_SERVER['REQUEST_URI'])) : str_replace('index.php', '', $_SERVER['REQUEST_URI']);
+			$uri = str_replace('//', '', $uri);
 
 			$array_tmp_uri = preg_split('[\\/]', $uri, -1, PREG_SPLIT_NO_EMPTY);
 
