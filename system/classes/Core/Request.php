@@ -55,8 +55,10 @@
 
 			try
 			{
-				if ($class !== NULL)
+				if ($class !== '')
 				{
+					$class = Application::$uri['controller'];
+
 					if (!Router::find($class) && $class !== Application::$_default)
 					{
 						$args = array(
@@ -83,22 +85,29 @@
 
 					if (is_subclass_of($controller, '\\Controller\\DefaultController'))
 					{
+						$this->initialize(Application::$uri['controller']);
+
 						$dbInstance = new DB(\Config\Globals::$dns, \Config\Globals::$user, \Config\Globals::$pass);
 						$daoName = '\\DAO\\' . $class;
 						$dao = (object) new $daoName($dbInstance);
 	
 						$rnName = '\\RN\\' . $class;					
 						$rn = (object) new $rnName($dao);
-						$controller = new $controller($controller, (Application::$uri['method'] == NULL ? 'index' : Application::$uri['method']), $this, $rn);
+						$controller = new $controller($this, $rn);
+
+						$controller->__setAction((Application::$uri['method'] == NULL ? 'index' : Application::$uri['method']));
 					}
 					else
-						$controller = new $controller($controller, (Application::$uri['method'] == NULL ? 'index' : Application::$uri['method']), $this);
+					{
+						$model = '\\Model\\' . $class;
+						$controller = new $controller($this, new $model);
+						$controller->__setAction((Application::$uri['method'] == NULL ? 'index' : Application::$uri['method']));
+					}
 
 					$method = method_exists($controller, Application::$uri['method']);
 
 					if ($method)
 					{
-						$controller->request->initialize(Application::$uri['controller']);
 						$controller->__before();
 
 						$this->token(Session::$id);
@@ -151,5 +160,34 @@
 		public function token($id = null)
 		{
 			return (!$id) ? $this->token : $this->token = $id;
+		}
+
+		public function normalizeUri($_class)
+		{
+			$_parts = [];
+			
+			if (is_array($_class))
+			{
+				foreach ($_class as $key => $value)
+				{
+					$_parts[$key] = self::normalizeUri($value);
+				}
+				
+				return $_parts;
+			}
+			else
+			{
+				$_sliced= explode('-', $_class);
+
+				foreach($_sliced as $_part)
+				{
+					if ($_sliced[0] == $_part)
+						$_parts[] = $_part;
+					else
+						$_parts[] = ucfirst($_part);
+				}
+				
+				return implode('', $_parts);
+			}
 		}
 	}

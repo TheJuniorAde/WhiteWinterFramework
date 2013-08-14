@@ -20,4 +20,9 @@
 
 			return (object) new $model;
 		}
+		
+		public function __construct()
+		{
+			return $this;
+		}
 	}

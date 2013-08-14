@@ -1,6 +1,7 @@
 <?php
 	require_once APPPATH . 'config/globals' . EXT;
 	require_once SYSPATH . 'classes/Core/Application' . EXT;
+	require_once SYSPATH . 'classes/Core/ExceptionHandler' . EXT;
 
 	spl_autoload_register(array('Core\\Application','autoload'));
 	ini_set('unserialize_callback_func', 'spl_autoload_call');

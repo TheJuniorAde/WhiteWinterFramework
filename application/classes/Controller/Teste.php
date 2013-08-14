@@ -6,9 +6,9 @@
 
 	class Teste extends DefaultController
 	{
-		public function __construct($controller, $action, Request $request, RN\Teste $rn, $model = 'Teste')
+		public function __construct(Request $request, RN\Teste $rn, $model = 'Teste')
 		{
-			parent::__construct($controller, $action, $request, $rn, $model);
+			parent::__construct($request, $rn, $model);
 		}
 
 		public function index()

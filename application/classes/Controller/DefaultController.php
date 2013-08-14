@@ -33,12 +33,10 @@
 			}
 		}
 
-		public function __construct($controller, $action, Request $request, DefaultRN $rn, $model)
+		public function __construct(Request $request, DefaultRN $rn, $model)
 		{
 			Header::noCache();
 
-			$this->_controller = ucfirst($controller);
-			$this->_action = $action;
 			$this->request = $request;
 			$this->rn = $rn;
 

@@ -7,6 +7,6 @@
 	{
 		public function index()
 		{
-			print 'Hello, World!';
+			echo 'Hello World!!';
 		}
 	}

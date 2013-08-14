@@ -2,8 +2,8 @@
 	namespace Core;
 
 	use \Config\Globals;
-	use Exception;
 	use \ErrorException;
+	use \Exception;
 
 	class Application
 	{
@@ -109,14 +109,13 @@
 		{
 			Globals::__uri();
 
-			self::$uri = Globals::$uri;
-
 			set_exception_handler(array('\\Core\\ExceptionHandler','handler'));
 			set_error_handler(array('\\Core\\Application','errorHandler'));
 			register_shutdown_function(array('\\Core\\Application','shutdown_handler'));
 			set_include_path(get_include_path() . ';' . $_SERVER['DOCUMENT_ROOT']);
 
 			self::$request = new Request();
+			self::$uri = self::$request->normalizeUri(Globals::$uri);
 		}
 
 		public static function execute()
@@ -182,7 +181,9 @@
 					print JSON::getData();
 				}
 				else
+				{
 					ExceptionHandler::handler(new ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']));
+				}
 
 				exit(1);
 			}
@@ -203,10 +204,15 @@
 				$rnName = '\\RN\\' . self::$_default;
 				$rn = (object) new $rnName($dao);
 
-				$controller = new $controller($controller, 'index', self::$request, $rn);
+				$controller = new $controller(self::$request, $rn);
+				$controller->__setAction('index');
 			}
 			else
-				$controller = new $controller($controller, 'index', self::$request);
+			{
+				$model = new \Model\HelloWorld();
+				$controller = new $controller(self::$request, $model);
+				$controller->__setAction('index');
+			}
 
 			$controller->__before();
 			$controller->index();

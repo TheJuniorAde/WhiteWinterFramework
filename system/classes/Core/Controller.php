@@ -9,7 +9,10 @@
 	 **/
 	abstract class Controller
 	{
-		public $_controller;
+		/**
+		 * Recebe o nome da ação requisitada
+		 * @var string
+		 */
 		public $_action;
 
 		/**
@@ -20,30 +23,37 @@
 		/**
 		 * @var Request
 		 */
-		public $request;
+		public $_request;
+		
+		/**
+		 * @var Response
+		 */
+		public $_response;
 
 		public function __before()
 		{
-			// maybe overwriten on extended classes
+			// maybe overwriten on inherited classes
 		}
 
-		public function __construct($controller, $action = '', Request $request, $model = NULL)
+		public function __construct(Request $request, /*Response $response,*/ Model $model)
 		{
-			$this->_controller	= ucfirst($controller);
 			$this->_action		= $action;
-			$this->request		= $request;
+			$this->_request		= $request;
+			$this->_response	= $response;
 
-			if ($model !== NULL)
-			{
-				$model = ucfirst($model);
-				$this->_model = $model;
+			$modelName = ucfirst(str_replace('Model\\', '', get_class($model)));
+			$this->_model = $modelName;
 
-				$this->$model = Model::factory($model);
-			}
+			$this->$modelName = $model;
+		}
+
+		public function __setAction($action)
+		{
+			$this->_action = $action;
 		}
 
 		public function __after()
 		{
-			// maybe overwriten on extended classes
+			// maybe overwriten on inherited classes
 		}
 	}

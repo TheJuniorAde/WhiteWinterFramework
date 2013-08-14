@@ -26,9 +26,9 @@
 		protected $_query;
 		protected $_result;
 
-		public function __construct($dsn, $username, $passwd, $options = NULL)
+		public function __construct()
 		{
-			return parent::__construct($dsn, $username, $passwd, $options);
+			return self::connect();
 		}
 
 		public static function connect()

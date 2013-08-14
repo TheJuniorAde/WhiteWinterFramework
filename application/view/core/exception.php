@@ -1,5 +1,4 @@
 <?php
-
 	if (! $message = unserialize($message))
 		$message['trace'] = $e->getMessage(); ?>
 <html>
